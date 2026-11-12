@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>暮らしのなかに</title>
+<style>
+:root {
+  box-sizing: border-box;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  --bg: #faf6ef;
+  --surface: #ffffff;
+  --text: #3b342c;
+  --muted: #8a7f72;
+  --line: #e9e1d4;
+  --accent: #b5683f;
+  --ph: #f0e8da;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #1e1b17; --surface: #2a2621; --text: #efe7da; --muted: #a89d8e;
+    --line: #3a352e; --accent: #e0905f; --ph: #352f28; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #1e1b17; --surface: #2a2621; --text: #efe7da; --muted: #a89d8e;
+  --line: #3a352e; --accent: #e0905f; --ph: #352f28; color-scheme: dark;
+}
+html { scroll-padding-top: env(safe-area-inset-top, 0px); }
+*, *::before, *::after { box-sizing: border-box; }
+body {
+  margin: 0; background: var(--bg); color: var(--text);
+  font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Noto Sans JP", Meiryo, sans-serif;
+  line-height: 1.7;
+}
+main { max-width: 680px; margin: 0 auto; padding: 28px 20px 48px; }
+header { text-align: center; margin-bottom: 32px; }
+.logo {
+  width: 120px; height: 120px; margin: 0 auto 16px;
+  border: 2px dashed var(--line); border-radius: 24px;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--muted); font-size: 12px; background: var(--surface);
+}
+.logo img { width: 100%; height: 100%; object-fit: contain; border-radius: 24px; }
+h1 { margin: 0; font-size: 28px; letter-spacing: .12em; font-weight: 600; }
+.lead { margin: 8px 0 0; color: var(--muted); font-size: 14px; }
+.list { display: grid; gap: 18px; }
+.card {
+  display: flex; align-items: stretch; text-decoration: none; color: inherit;
+  background: var(--surface); border: 1px solid var(--line);
+  border-radius: 18px; overflow: hidden;
+  transition: transform .15s ease, box-shadow .15s ease;
+}
+.card:active { transform: scale(.99); }
+@media (hover: hover) { .card:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(0,0,0,.08); } }
+.thumb {
+  flex: 0 0 auto; width: min(40%, 200px); aspect-ratio: 3 / 2; background: var(--ph);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--muted); font-size: 13px;
+}
+.thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.body { flex: 1; min-width: 0; padding: 14px 16px; display: flex; flex-direction: column; justify-content: center; }
+.name { margin: 0 0 4px; font-size: 16px; font-weight: 600; line-height: 1.4; }
+.desc { margin: 0 0 8px; font-size: 13px; color: var(--muted); line-height: 1.6; }
+.go { font-size: 13px; color: var(--accent); font-weight: 600; }
+footer { margin-top: 36px; text-align: center; color: var(--muted); font-size: 12px; }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <!-- ロゴ画像の仮スペース。完成したら LOGO_SRC に画像（data URI）を入れます -->
+    <div class="logo" id="logo">ロゴ</div>
+    <h1>暮らしのなかに</h1>
+    <p class="lead">日々の暮らしにそっと寄り添うWebアプリ集</p>
+  </header>
+
+  <div class="list" id="list"></div>
+
+  <footer>© 暮らしのなかに</footer>
+</main>
+
+<script>
+// ▼ ロゴ画像ができたらここに入れる（空のままなら仮スペース表示）
+var LOGO_SRC = "";
+
+// ▼ アプリを追加するときは、下の配列に1件ずつ追記します
+//   image は画像の data URI（空なら仮の画像枠が表示されます）
+var APPS = [
+  {
+    name: "ビンゴカード",
+    desc: "Web上で繰り返し使えるビンゴカードです。",
+    image: "",
+    url: "https://emptycan31.github.io/bingo/"
+  },
+  {
+    name: "アプリ名その2（サンプル）",
+    desc: "二つ目のアプリの紹介文です。実際のアプリ情報に差し替えてください。",
+    image: "",
+    url: "https://github.com/"
+  },
+  {
+    name: "アプリ名その3（サンプル）",
+    desc: "三つ目のアプリの紹介文です。",
+    image: "",
+    url: "https://github.com/"
+  }
+];
+
+(function () {
+  if (LOGO_SRC) {
+    var logo = document.getElementById("logo");
+    logo.style.border = "none";
+    logo.innerHTML = "";
+    var li = document.createElement("img");
+    li.src = LOGO_SRC; li.alt = "暮らしのなかに";
+    logo.appendChild(li);
+  }
+  var list = document.getElementById("list");
+  APPS.forEach(function (app) {
+    var a = document.createElement("a");
+    a.className = "card";
+    a.href = app.url; a.target = "_blank"; a.rel = "noopener noreferrer";
+
+    var t = document.createElement("div");
+    t.className = "thumb";
+    if (app.image) {
+      var im = document.createElement("img");
+      im.src = app.image; im.alt = app.name; t.appendChild(im);
+    } else { t.textContent = "画像"; }
+
+    var b = document.createElement("div");
+    b.className = "body";
+    var n = document.createElement("h2"); n.className = "name"; n.textContent = app.name;
+    var d = document.createElement("p"); d.className = "desc"; d.textContent = app.desc;
+    var g = document.createElement("span"); g.className = "go"; g.textContent = "アプリを開く →";
+    b.appendChild(n); b.appendChild(d); b.appendChild(g);
+
+    a.appendChild(t); a.appendChild(b);
+    list.appendChild(a);
+  });
+})();
+</script>
+</body>
+</html>
