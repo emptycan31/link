@@ -47,6 +47,12 @@ header { text-align: center; margin-bottom: 32px; }
 h1 { margin: 0; font-size: 28px; letter-spacing: .12em; font-weight: 600; }
 .lead { margin: 8px 0 0; color: var(--muted); font-size: 14px; }
 .list { display: grid; gap: 18px; }
+.news { margin: 0 0 28px; padding: 14px 18px; background: var(--surface); border: 1px solid var(--line); border-radius: 18px; }
+.news h2 { margin: 0 0 8px; font-size: 14px; letter-spacing: .1em; color: var(--accent); }
+.news ul { list-style: none; margin: 0; padding: 0; }
+.news li { display: flex; gap: 12px; padding: 6px 0; font-size: 14px; border-top: 1px solid var(--line); }
+.news li:first-child { border-top: none; }
+.news time { flex: 0 0 auto; color: var(--muted); font-size: 13px; font-variant-numeric: tabular-nums; }
 .card {
   display: flex; align-items: stretch; text-decoration: none; color: inherit;
   background: var(--surface); border: 1px solid var(--line);
@@ -76,16 +82,22 @@ footer { margin-top: 36px; text-align: center; color: var(--muted); font-size: 1
     <h1>暮らしのなかに</h1>
     <p class="lead">日々の暮らしをちょっと良くしてみませんか。</p>
   </header>
-
+  
+ <section class="news" id="news">
+    <h2>infomation</h2>
+    <ul id="newsList"></ul>
+  </section>
   <div class="list" id="list"></div>
-
   <footer>© 暮らしのなかに</footer>
 </main>
 
 <script>
 // ▼ ロゴ画像ができたらここに入れる（空のままなら仮スペース表示）
 var LOGO_SRC = "";
-
+  
+var UPDATES = [
+  { date: "2026.11.17", text: "ビンゴカードを追加しました。" }
+];
 // ▼ アプリを追加するときは、下の配列に1件ずつ追記します
 //   image は画像の data URI（空なら仮の画像枠が表示されます）
 var APPS = [
@@ -147,6 +159,15 @@ var APPS = [
     var li = document.createElement("img");
     li.src = LOGO_SRC; li.alt = "暮らしのなかに";
     logo.appendChild(li);
+    var newsList = document.getElementById("newsList");
+  if (!UPDATES.length) { document.getElementById("news").style.display = "none"; }
+  UPDATES.forEach(function (u) {
+    var li = document.createElement("li");
+    var tm = document.createElement("time"); tm.textContent = u.date;
+    var sp = document.createElement("span"); sp.textContent = u.text;
+    li.appendChild(tm); li.appendChild(sp);
+    newsList.appendChild(li);
+  });
   }
   var list = document.getElementById("list");
   APPS.forEach(function (app) {
